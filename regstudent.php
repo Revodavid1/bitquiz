@@ -38,48 +38,44 @@ if(!isset($_SESSION["logged_in_instr_id"])){
 
 	<div class="text-center">
 		<div class="border border-dark">
-			
 			<form class="m-2" method="POST" onsubmit="getallregstuds()">	
-				<div class="form-row">
-			    <div class="form-group col-md-3 mb-3">
-			    <div class="form-group">
-				    <?php
-						$listcourse = new Courses();
-						$listcourse->listCourseforstudreg();
-					?>  
-				</div>
-			    </div>
-			    <div class="form-group col-md-3 mb-3">
-			    <div class="form-group">
-					<select name="studstoreg" class="custom-select" id="studstoreg" multiple>
-					  <?php
-						$studtoreg = new Users();
-						$studtoreg->getstds('student');
-						?>  
-					</select>
-				</div>
-			    </div>
-			    
-			     <div class="form-group col-md-3 mb-3">
-			    <div class="form-group">
-			    <div class="subject-info-arrows text-center">
-				  <input type="button" id="regRight" value="Add" class="btn btn-default" /><br />
-				  <input type="button" id="unregLeft" value="Remove" class="btn btn-default mt-1"/><br />
-				</div>
-				</div>
-				</div>
-			  
-			     <div class="form-group col-md-3 mb-3">
+			<div class="form-row">
+				<div class="form-group col-md-3 mb-3">
 			    	<div class="form-group">
-					<select name="studsreg[]" class="custom-select" id="studsreg" multiple>
-					  
-					</select>
+					    <?php
+							$listcourse = new Courses();
+							$listcourse->listCourseforstudreg();
+						?>  
 					</div>
 			    </div>
-			  </div>
+				<div class="form-group col-md-3 mb-3">
+			    	<div class="form-group">
+						<select name="studstoreg" class="custom-select" id="studstoreg" multiple>
+						  <?php
+							$studtoreg = new Users();
+							$studtoreg->getstds('student');
+							?>  
+						</select>
+					</div>
+			    </div>
+			    
+			    <div class="form-group col-md-3 mb-3">
+			    	<div class="form-group">
+			    		<div class="subject-info-arrows text-center">
+				  			<input type="button" id="regRight" value="Add" class="btn btn-default" /><br />
+				  			<input type="button" id="unregLeft" value="Remove" class="btn btn-default mt-1"/><br />
+						</div>
+					</div>
+				</div>
 			  
-			  
-			  <input type="submit" class="btn btn-primary mt-1" id="submitstdreg" name="submitstdreg" value="Submit"/>
+			   	<div class="form-group col-md-3 mb-3">
+			    	<div class="form-group">
+						<select name="studsreg[]" class="custom-select" id="studsreg" multiple>
+						</select>
+					</div>
+			    </div>
+			</div>
+			 <input type="submit" class="btn btn-primary mt-1" id="submitstdreg" name="submitstdreg" value="Submit"/>
 			</form>
 		</div>
 	</div>
