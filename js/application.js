@@ -27,23 +27,23 @@ $(document).ready(function(){
 
 (function () {
     $('#regRight').click(function (e) {
-        var selectedOpts = $('#studstoreg option:selected');
-        if (selectedOpts.length == 0) {
-            alert("Nothing to move.");
+        var selectedstud = $('#studstoreg option:selected');
+        if (selectedstud.length == 0) {
+            alert("No student selected");
             e.preventDefault();
         }
         $('#studsreg').append($(selectedOpts).clone());
-        $(selectedOpts).remove();
+        $(selectedstud).remove();
         e.preventDefault();
     });
     $('#unregLeft').click(function (e) {
-        var selectedOpts = $('#studsreg option:selected');
-        if (selectedOpts.length == 0) {
-            alert("Nothing to move.");
+        var selectedstud = $('#studsreg option:selected');
+        if (selectedstud.length == 0) {
+            alert("No student selected");
             e.preventDefault();
         }
-        $('#studstoreg').append($(selectedOpts).clone());
-        $(selectedOpts).remove();
+        $('#studstoreg').append($(selectedstud).clone());
+        $(selectedstud).remove();
         e.preventDefault();
     });
 }(jQuery));
