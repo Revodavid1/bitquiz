@@ -60,7 +60,7 @@ class Users{
 		//creates users
 		public function createUsers($fName,$lname,$uName,$uPass,$uaccType){
 			$conn = new mysqli("localhost", "root", "", "bqdb");
-			$hashpass = md5($uPass);
+			$hashpass = md5($uPass); //just for local, change from md5 when deploying
 			
 			$sqlemailcheck = "SELECT uName FROM $this->bq_users WHERE uName = '$uName'";
 			$resultemailcheck = mysqli_query($conn,$sqlemailcheck);
