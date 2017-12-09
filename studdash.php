@@ -16,25 +16,23 @@ if(!isset($_SESSION["logged_in_stud_id"])){
 
 
 <body class="container">
-	<?php require "layout/studnav.php" ?>
-	
+	<?php require "layout/studnav.php" ?>	
 	<div class="jumbotron mt-1" style="background-image: url('bq main.PNG');background-repeat: no-repeat;background-attachment: fixed;background-size: cover;opacity: 0.8;">
-  			<h1 class="display-3 text-white">BitQuiz</h1>
-  			<p class="lead text-white">#1 choice for classroom quiz.</p>
+  		<h1 class="display-3 text-white">BitQuiz</h1>
+  		<p class="lead text-white">#1 choice for classroom quiz.</p>
 	</div>
 	
 	<div class="text-center">
 		<div class="border border-dark">
 			<form class="m-2" method="POST">	
-				<div class="form-row">
-			    	<div class="form-group col-md-12">
-						<?php
-							$listcrstotake = new Courses();
-							$listcrstotake->liststudcrs();
-						?>  
-					</div>
+			<div class="form-row">
+				<div class="form-group col-md-12">
+					<?php
+						$listcrstotake = new Courses();
+						$listcrstotake->liststudcrs();
+					?>  
 				</div>
-				
+			</div>	
 			</form>
 		</div>
 	</div>
