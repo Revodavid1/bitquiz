@@ -51,7 +51,7 @@
 			$sql = "SELECT quizstudstat.id,quizstudstat.quizid,quizstudstat.score,bq_courses.code FROM $this->quizstudstat INNER JOIN $this->bq_courses on quizstudstat.quizid=bq_courses.id WHERE quizstudstat.studentid='$thisstud' ORDER BY quizstudstat.id";
 			$query = mysqli_query($conn,$sql);
 			echo 
-			"<table class='table table-sm table-striped table-bordered table-condensed'>
+			"<form method='POST'><table class='table table-sm table-striped table-bordered table-condensed'>
   				<tr>
   					<th>Course</th>
   					<th>Score</th>
@@ -60,6 +60,7 @@
 			while ($result = mysqli_fetch_assoc($query)){
 				$thiscrs = $result['code'];
 				$thisscore=$result['score'];
+				$thisqzid = $result["quizid"];
 				echo 
 				"<tr>
 					<td>$thiscrs</td> 
@@ -69,8 +70,11 @@
 					$querycheckcrs = mysqli_query($conn,$sqlcheckcrs);
 					while ($resultcheckcrs = mysqli_fetch_assoc($querycheckcrs)){
 						$crsstatus = $resultcheckcrs['status'];
-						if ($crsstatus == 'Unlocked'){
-							echo"<button class='button btn-default clickable editinstr' crsid='".$result['id']."' crs='".$result['code']."' style='color:grey;'>Take Quiz</button>";
+						if ($crsstatus == 'Unlocked' && $thisscore == 'NA'){
+							echo"<input type='submit' class='button btn-default' name='strtqz' style='color:grey;' value='Take Quiz'/>";
+						}
+						elseif ($crsstatus == 'Unlocked' && $thisscore!='NA'){
+							echo"<p>Quiz already submitted</p>";
 						}
 						else{
 							echo"<p>Quiz is currently unavailable.</p>";
@@ -81,7 +85,15 @@
 			echo"</td>
 				</tr>";
 			}
-			echo "</table>";
+			echo "</table></form>";
+			
+			
+			$createCourse = new Courses;
+	
+			if (isset($_POST["strtqz"])){
+				$_SESSION["quiztotake_id"] = $thisqzid;
+				header("Location:quiztime.php");
+			} 
 		}
 		
 		public function listCourseforInstr(){
