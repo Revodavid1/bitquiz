@@ -2,6 +2,7 @@
 
 class Users{
 		protected $bq_users = "bq_users";
+		protected $semester = "semester";
 		
 		//admin login
 		public function adminLogin($username,$pswd){
@@ -24,7 +25,7 @@ class Users{
 		//instructor or student login
 		public function instrstudLogin($username,$pswd){
 			$conn = new mysqli("localhost", "root", "", "bqdb");
-			$hashpass = md5($pswd);
+			$hashpass = md5($pswd); //just for local, change from md5 when deploying
 			$sql = "SELECT * FROM $this->bq_users WHERE uName = '$username' AND uPass = '$hashpass'";
 			$result = mysqli_query($conn,$sql);
 			while($query = mysqli_fetch_assoc($result)){
@@ -37,6 +38,15 @@ class Users{
 			}
 			//checks to see if user exists
 			if (mysqli_num_rows($result) == 1){
+				
+				$conn = new mysqli("localhost", "root", "", "bqdb");
+				$sqlsem = "SELECT semester FROM $this->semester LIMIT 1";
+				$resultsem = mysqli_query($conn,$sqlsem);
+					while($querysem = mysqli_fetch_assoc($resultsem)){
+						$curr_sem = $querysem['semester'];
+						$_SESSION["curr_sem"] = $curr_sem;
+				}
+				
 				if($si_type == 'student'){
 					$_SESSION["logged_in_stud_id"] = $si_id;
 					$_SESSION["logged_in_stud_fName"] = $si_fName;
@@ -60,7 +70,7 @@ class Users{
 		//creates users
 		public function createUsers($fName,$lname,$uName,$uPass,$uaccType){
 			$conn = new mysqli("localhost", "root", "", "bqdb");
-			$hashpass = md5($uPass); //just for local, change from md5 when deploying
+			$hashpass = md5($uPass);
 			
 			$sqlemailcheck = "SELECT uName FROM $this->bq_users WHERE uName = '$uName'";
 			$resultemailcheck = mysqli_query($conn,$sqlemailcheck);
