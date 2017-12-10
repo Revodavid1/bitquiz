@@ -32,7 +32,7 @@ $(document).ready(function(){
             alert("No student selected");
             e.preventDefault();
         }
-        $('#studsreg').append($(selectedOpts).clone());
+        $('#studsreg').append($(selectedstud).clone());
         $(selectedstud).remove();
         e.preventDefault();
     });
