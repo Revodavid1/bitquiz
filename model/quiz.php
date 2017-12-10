@@ -6,6 +6,7 @@
 		protected $quiz = "quiz";
 		protected $quizstudstat = "quizstudstat";
 		protected $bq_users = "bq_users";
+		protected $bq_quiz_taken = "bq_quiz_taken";
 		
 		
 		public function addquizSettings($crsid,$crsem,$qzqty,$qztime,$instrid){
@@ -28,7 +29,7 @@
 				}
 			}
 			else{
-			$sql = "INSERT INTO $this->quizstudstat (studentid,quizid) VALUES('$sid','$cid')";
+			$sql = "INSERT INTO $this->quizstudstat (studentid,quizid,score) VALUES('$sid','$cid','NA')";
 			$result = mysqli_query($conn,$sql);	
 			echo '<div class="text-center wave alert alert-success" role="alert"> "One or More Student Saved Successfully" </div>';	
 			}
@@ -50,7 +51,7 @@
 				$qd = $_POST["d$i"];
 				$ans = $_POST["ans$i"];
 				$conn = new mysqli("localhost", "root", "", "bqdb");
-				$sql = "INSERT INTO $this->quiz (crs_id,question,quizno,A,B,C,D,c_answer) VALUES('$crsid','$quizno','$question','$qa','$qb','$qc', '$qd','$ans')";
+				$sql = "INSERT INTO $this->quiz (crs_id,question,quizno,A,B,C,D,c_answer) VALUES('$crsid','$question','$quizno','$qa','$qb','$qc', '$qd','$ans')";
 				$result = mysqli_query($conn,$sql);	
 				unset($_SESSION["current_crsid"]);
 				header("Location:setquiz.php");	
@@ -100,6 +101,111 @@
 			echo "<button type='submit' class='btn btn-success mt-1' name='sbQs' id='sbQs'>Submit</button>";
 			echo"</form>";
 		}
+		
+		
+		public function getQuiz($qzid){
+			$thisstud = $_SESSION["logged_in_stud_id"];
+			$curr_sem = $_SESSION["curr_sem"];
+			$conn = new mysqli("localhost", "root", "", "bqdb");
+			$sql = "SELECT bq_courses.code,bq_quiz_settings.time,bq_quiz_settings.qzqty FROM $this->bq_courses INNER JOIN $this->bq_quiz_settings on bq_courses.id=bq_quiz_settings.crsid WHERE bq_courses.id = '$qzid'";
+			$query = mysqli_query($conn,$sql);
+			while ($result = mysqli_fetch_assoc($query)){
+				$qzqty = $result['qzqty'];
+				echo"<h6>Course: ".$result['code']."</h6>
+				<h6>Time: ".$result['time']." mins</h6>
+				<h6>No of Questions: ".$result['qzqty']."</h6>";
+				
+			}
+			$sqlqz = "SELECT * FROM $this->quiz WHERE crs_id = '$qzid'";
+			$queryqz = mysqli_query($conn,$sqlqz);
+			$i = 1;
+			echo"<form method='POST' class='mb-2'>";
+			
+			
+			if (isset($_POST["subqz"])){
+				for($i=1;$i<=$qzqty;$i++){
+					if(isset($_POST["question$i"])){
+						$thisanswer = $_POST["question$i"];
+					}
+					else{
+						$thisanswer = 'blank';
+					}
+					$conn = new mysqli("localhost", "root", "", "bqdb");
+					$sqlsaveans = "INSERT INTO $this->bq_quiz_taken (qzid,studid,qzno,answer,semester) VALUES('$qzid','$thisstud','$i','$thisanswer','$curr_sem')";
+					$resultsaveans = mysqli_query($conn,$sqlsaveans);
+				}
+			$_SESSION["quiztoshowscoreid"] = $qzid;
+			unset($_SESSION["quiztotake_id"]);
+			header("Location:showscore.php");
+			}
+			
+			
+			while ($resultqz = mysqli_fetch_assoc($queryqz)){
+				echo 
+				"<div class='card'>
+					<div class='card-body'>
+				    	<h4 class='card-title'>Question $i: ".$resultqz['question']."</h4>
+				    	
+				    	<div class='form-check'>
+				    		<label class='form-check-label'>
+						    <input class='form-check-input' type='radio' name='question$i' id='AA' value='A'>
+						    ".$resultqz['A']."
+						  	</label>
+						</div>
+						<div class='form-check'>
+				    		<label class='form-check-label'>
+						    <input class='form-check-input' type='radio' name='question$i' id='check$i' value='B'>
+						    ".$resultqz['B']."
+						  	</label>
+						</div>
+						<div class='form-check'>
+				    		<label class='form-check-label'>
+						    <input class='form-check-input' type='radio' name='question$i' id='check$i' value='C'>
+						    ".$resultqz['C']."
+						  	</label>
+						</div>
+						<div class='form-check'>
+				    		<label class='form-check-label'>
+						    <input class='form-check-input' type='radio' name='question$i' id='check$i' value='D'>
+						    ".$resultqz['D']."
+						  	</label>
+						</div>
+				  	</div>
+				</div>";
+			$i++;
+			}
+			echo "<button type='submit' class='btn btn-success mt-1' name='subqz'>Submit</button>";
+			echo"</form>";
+		}
+
+		public function showScore($qzid,$studid,$cursem){
+			$score = 0;
+			$conn = new mysqli("localhost", "root", "", "bqdb");
+			$sql = "SELECT * FROM $this->bq_quiz_taken WHERE qzid = '$qzid' AND studid = '$studid' AND semester = '$cursem'";
+			$query = mysqli_query($conn,$sql);
+			while ($result = mysqli_fetch_assoc($query)){
+				$thisqzno = $result['qzno'];
+				$studans = $result['answer'];
+				$sqlcrossans = "SELECT * FROM $this->quiz WHERE crs_id = '$qzid' AND quizno = '$thisqzno'";
+				$querycrossans = mysqli_query($conn,$sqlcrossans);
+				while ($resultcrossans = mysqli_fetch_assoc($querycrossans)){
+					$correctanswer = $resultcrossans['c_answer'];
+					if ($studans == $correctanswer){
+						$score++;
+					}
+				}
+			}
+			echo "<div class='card'>
+  				<div class='card-body'>
+    				<h4>Your Final Score is</h4>
+    				<h3>$score</h3>
+  				</div>
+				</div>";
+			
+			$sqlupdscore = "UPDATE $this->quizstudstat SET score='$score' WHERE studentid='$studid' AND quizid='$qzid'";
+			$resultupdscore = mysqli_query($conn,$sqlupdscore);
+		}
+		
 			
 } 
 	
