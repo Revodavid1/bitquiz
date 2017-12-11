@@ -20,8 +20,9 @@
 		}
 		
 		public function regStudsforquiz($sid,$cid){
+			$curr_sem = $_SESSION["curr_sem"];
 			$conn = new mysqli("localhost", "root", "", "bqdb");
-			$sqlcheck = "SELECT quizstudstat.studentid,quizstudstat.quizid,bq_users.fName,bq_users.lName FROM $this->quizstudstat INNER JOIN $this->bq_users on quizstudstat.studentid=bq_users.id WHERE studentid = '$sid' AND quizid = '$cid'";
+			$sqlcheck = "SELECT quizstudstat.studentid,quizstudstat.quizid,bq_users.fName,bq_users.lName FROM $this->quizstudstat INNER JOIN $this->bq_users on quizstudstat.studentid=bq_users.id WHERE studentid = '$sid' AND quizid = '$cid' AND semester='$curr_sem'";
 			$querycheck = mysqli_query($conn,$sqlcheck);
 			if (mysqli_num_rows($querycheck) >= 1){
 				while ($resultcheck = mysqli_fetch_assoc($querycheck)){
@@ -29,7 +30,7 @@
 				}
 			}
 			else{
-			$sql = "INSERT INTO $this->quizstudstat (studentid,quizid,score) VALUES('$sid','$cid','NA')";
+			$sql = "INSERT INTO $this->quizstudstat (studentid,quizid,score,semester) VALUES('$sid','$cid','NA','$curr_sem')";
 			$result = mysqli_query($conn,$sql);	
 			echo '<div class="text-center wave alert alert-success" role="alert"> "One or More Student Saved Successfully" </div>';	
 			}
