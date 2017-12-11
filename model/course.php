@@ -46,9 +46,10 @@
 		}
 		
 		public function liststudcrs(){
+			$curr_sem = $_SESSION["curr_sem"];
 			$thisstud = $_SESSION["logged_in_stud_id"];
 			$conn = new mysqli("localhost", "root", "", "bqdb");
-			$sql = "SELECT quizstudstat.id,quizstudstat.quizid,quizstudstat.score,bq_courses.code FROM $this->quizstudstat INNER JOIN $this->bq_courses on quizstudstat.quizid=bq_courses.id WHERE quizstudstat.studentid='$thisstud' ORDER BY quizstudstat.id";
+			$sql = "SELECT quizstudstat.id,quizstudstat.quizid,quizstudstat.score,bq_courses.code FROM $this->quizstudstat INNER JOIN $this->bq_courses on quizstudstat.quizid=bq_courses.id WHERE quizstudstat.studentid='$thisstud' AND semester='$curr_sem' ORDER BY quizstudstat.id";
 			$query = mysqli_query($conn,$sql);
 			echo 
 			"<form method='POST'><table class='table table-sm table-striped table-bordered table-condensed'>
