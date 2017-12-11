@@ -50,7 +50,7 @@ if(!isset($_SESSION["logged_in_instr_id"])){
 		      <div class="card-body">
 		        <h4 class="card-title">View Grades</h4>
 		        <p class="card-text">View Completed Quiz.</p>
-		        <a href="addcourse.php" class="btn btn-light">Add</a>
+		        <a href="viewgrades.php" class="btn btn-light">View</a>
 		      </div>
 		    </div>
 		  </div>
