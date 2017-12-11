@@ -20,7 +20,7 @@
         		<a class="nav-link" href="regstudent.php">Register Students</a>
       		</li>
       		<li class="nav-item">
-        		<a class="nav-link" href="chginstr.php">View Grades</a>
+        		<a class="nav-link" href="viewgrades.php">View Grades</a>
       		</li>
       		<?php
       		$si_fName = $_SESSION["logged_in_instr_fName"];
