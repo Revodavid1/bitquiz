@@ -207,6 +207,70 @@
 			$resultupdscore = mysqli_query($conn,$sqlupdscore);
 		}
 		
+		
+		public function listgradeperinstr(){
+			$curr_sem = $_SESSION["curr_sem"];
+			$si_id = $_SESSION["logged_in_instr_id"];
+			$conn = new mysqli("localhost", "root", "", "bqdb");
+			$sql = "SELECT bq_quiz_settings.crsid,bq_quiz_settings.qzqty,quizstudstat.studentid,quizstudstat.score FROM $this->bq_quiz_settings INNER JOIN $this->quizstudstat on bq_quiz_settings.crsid=quizstudstat.quizid WHERE bq_quiz_settings.instructorid = '$si_id' AND crsemester='$curr_sem'";
+			$query = mysqli_query($conn,$sql);
+			
+			echo"
+				<table class='table table-sm'>
+				  <thead>
+				    <tr>
+				      <th scope='col'>Course</th>
+				      <th scope='col'># of Questions</th>
+				      <th scope='col'>Student Name & Score</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+			";
+			while ($result = mysqli_fetch_assoc($query)){
+				$crs = $result['crsid'];
+				$qty = $result['qzqty'];
+				$sid = $result['studentid'];
+				$score = $result['score'];
+				echo"
+			    	<tr>";
+			    	$conn = new mysqli("localhost", "root", "", "bqdb");
+					$sqlgetcode = "SELECT code FROM $this->bq_courses WHERE id = '$crs'";
+					$querygetcode = mysqli_query($conn,$sqlgetcode);
+					while ($resultquerygetcode = mysqli_fetch_assoc($querygetcode)){
+						$thiscode=$resultquerygetcode['code'];
+						echo"<td>$thiscode</td>";
+					}
+					
+					$conn = new mysqli("localhost", "root", "", "bqdb");
+					$sqlgetname = "SELECT fName,lName FROM $this->bq_users WHERE id = '$sid'";
+					$querygetname = mysqli_query($conn,$sqlgetname);
+					while ($resultquerygetname = mysqli_fetch_assoc($querygetname)){
+						$fName = $resultquerygetname['fName'];
+						$lName=$resultquerygetname['lName'];
+						$scorezone = $qty / 2;
+						echo"<td>$qty</td>
+				      	<td>$fName $lName";
+				      		if ($score == 'NA'){
+								echo "<span class='badge badge-warning badge-pill ml-1'>$score</span>";
+							}
+				      		elseif ($score >= $scorezone ){
+								echo "<span class='badge badge-success badge-pill ml-1'>$score</span>";
+							}
+							else{
+								echo "<span class='badge badge-danger badge-pill ml-1'>$score</span>";
+							}
+   						 	
+   					   	echo"</td>";
+					}
+					
+						
+				    echo"</tr> 
+			    ";
+			}
+		echo"</tbody>
+			</table>";
+		}
+		
 			
 } 
 	
