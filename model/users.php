@@ -94,7 +94,7 @@ class Users{
 				<select class="form-control" name="instrSelect" required>
 			    <option value="">Select Instructor</option>';
 			while ($result = mysqli_fetch_assoc($query)){
-  				echo'<option value='.$result['uName'].'>'.$result['lName'].'  '.$result['fName'].'</option>';
+  				echo'<option value='.$result['id'].'>'.$result['lName'].'  '.$result['fName'].'</option>';
 			}
 			echo'</select>';
 		}
