@@ -32,8 +32,6 @@ if(!isset($_SESSION["logged_in_stud_id"])){
 							echo 'No selected quiz or quiz has been submitted';
 						}
 						else{
-							$curr_sem = $_SESSION["curr_sem"];
-							echo $curr_sem. ' Exam';
 							$qzid = $_SESSION["quiztotake_id"];
 							$getQuiz = new Quiz;
 							$getQuiz->getQuiz($qzid);
@@ -45,5 +43,8 @@ if(!isset($_SESSION["logged_in_stud_id"])){
 		</div>
 	</div>
 </body>
-
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+	<script src="js/cdt.js"></script>
 </html>
