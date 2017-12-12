@@ -24,7 +24,7 @@
 		
 		public function listCourseInstr(){
 			$conn = new mysqli("localhost", "root", "", "bqdb");
-			$sql = "SELECT bq_courses.id,bq_courses.code,bq_users.fName,bq_users.lName FROM $this->bq_courses INNER JOIN $this->bq_users on instr=uName ORDER BY code";
+			$sql = "SELECT bq_courses.id,bq_courses.code,bq_users.fName,bq_users.lName FROM $this->bq_courses INNER JOIN $this->bq_users on instr=bq_users.id ORDER BY code";
 			$query = mysqli_query($conn,$sql);
 			echo 
 				"<table class='table table-sm table-striped table-bordered table-condensed'>
@@ -88,7 +88,6 @@
 			}
 			echo "</table></form>";
 			
-			
 			$createCourse = new Courses;
 	
 			if (isset($_POST["strtqz"])){
@@ -98,9 +97,9 @@
 		}
 		
 		public function listCourseforInstr(){
-			$si_uName = $_SESSION["logged_in_instr_email"];
+			$si_id = $_SESSION["logged_in_instr_id"];
 			$conn = new mysqli("localhost", "root", "", "bqdb");
-			$sql = "SELECT id,code,status FROM $this->bq_courses WHERE instr = '$si_uName' ORDER BY code";
+			$sql = "SELECT id,code,status FROM $this->bq_courses WHERE instr = '$si_id' ORDER BY code";
 			$query = mysqli_query($conn,$sql);
 			echo "<table class='table table-sm table-striped table-bordered table-condensed mx-auto' style='width: 600px'>
   					<tr>
@@ -133,9 +132,9 @@
 		
 		
 		public function listCourseforstudreg(){
-			$si_uName = $_SESSION["logged_in_instr_email"];
+			$si_id = $_SESSION["logged_in_instr_id"];
 			$conn = new mysqli("localhost", "root", "", "bqdb");
-			$sql = "SELECT id,code,status FROM $this->bq_courses WHERE instr = '$si_uName' ORDER BY code";
+			$sql = "SELECT id,code,status FROM $this->bq_courses WHERE instr = '$si_id' ORDER BY code";
 			$query = mysqli_query($conn,$sql);
 			echo "
 			<label>Select Course: </label>
@@ -153,7 +152,7 @@
 			$conn = new mysqli("localhost", "root", "", "bqdb");
 			$sql = "UPDATE $this->bq_courses SET instr = '$instr' WHERE id = '$id'";
 			$result = mysqli_query($conn,$sql);
-			header("Refresh:0;chginstr.php");
+			echo "<meta http-equiv='refresh' content='0'>";
 		}
 		
 			//update status
