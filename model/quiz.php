@@ -112,9 +112,22 @@
 			$query = mysqli_query($conn,$sql);
 			while ($result = mysqli_fetch_assoc($query)){
 				$qzqty = $result['qzqty'];
-				echo"<h6>Course: ".$result['code']."</h6>
-				<h6>Time: ".$result['time']." mins</h6>
-				<h6>No of Questions: ".$result['qzqty']."</h6>";
+				$qztime = $result['time'];
+				echo "</br>";
+				date_default_timezone_set('America/New_York');
+				$nowtime = date('Y/m/d h:i:s A');
+				$endTime = strtotime("+$qztime minutes", strtotime($nowtime));
+				$finalendtime = date('Y/m/d h:i:s A', $endTime);
+				echo"<div>
+				<h6>$curr_sem Exam</h6>
+				<h6 >Course: ".$result['code']."</h6>
+				<h6>No of Questions: $qzqty</h6>
+				<h6>Time Given: $qztime mins</h6>
+				<input type='hidden' id='hidetime' name='hidetime' value='$finalendtime'>
+				<div class='text-right fixed-top'><h6 class='card-title'><span class='badge badge-danger' id='cdt'></span></h6></div>
+				</div>
+				
+				";
 				
 			}
 			$sqlqz = "SELECT * FROM $this->quiz WHERE crs_id = '$qzid'";
@@ -175,7 +188,7 @@
 				</div>";
 			$i++;
 			}
-			echo "<button type='submit' class='btn btn-success mt-1' name='subqz'>Submit</button>";
+			echo "<button type='submit' class='btn btn-success mt-1' id='subqz' name='subqz'>Submit</button>";
 			echo"</form>";
 		}
 
